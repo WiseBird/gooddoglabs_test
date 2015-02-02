@@ -1,10 +1,10 @@
 package app
 
 import (
-    "github.com/revel/revel"
-    "fmt"
-    _ "github.com/lib/pq"
-    db "github.com/revel/revel/modules/db/app"
+	"fmt"
+	_ "github.com/lib/pq"
+	"github.com/revel/revel"
+	db "github.com/revel/revel/modules/db/app"
 )
 
 func init() {
@@ -43,9 +43,9 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 }
 
 func InitDB() {
-    db.Init()
+	db.Init()
 
-    qstr := `
+	qstr := `
 
 -- ----------------------------
 --  Sequence structure for users_id_seq
@@ -84,10 +84,10 @@ ALTER SEQUENCE "public"."users_id_seq" RESTART 3 OWNED BY "users"."id";
 ALTER TABLE "public"."users" ADD PRIMARY KEY ("id") NOT DEFERRABLE INITIALLY IMMEDIATE;
  `
 
-    _, err := db.Db.Exec(qstr)
-    if err != nil {
-        panic(err)
-    }
-    
-    fmt.Println("Database rebuilded successfully")
+	_, err := db.Db.Exec(qstr)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Database rebuilded successfully")
 }

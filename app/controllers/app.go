@@ -1,8 +1,8 @@
 package controllers
 
 import (
-    "github.com/revel/revel"
-    "github.com/WiseBird/gooddoglabs_test/app/models"
+	"github.com/WiseBird/gooddoglabs_test/app/models"
+	"github.com/revel/revel"
 )
 
 type App struct {
