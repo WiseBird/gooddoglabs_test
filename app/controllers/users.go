@@ -20,7 +20,7 @@ func (c Users) List() revel.Result {
     
     rows, err := c.Txn.Query("SELECT id, firstname, lastname FROM users")
     if err != nil {
-        return renderJsonError(c.Controller, err)
+        return renderRestError(c.Controller, err)
     }
     defer rows.Close()
     
@@ -31,16 +31,16 @@ func (c Users) List() revel.Result {
         var firstname string
         var lastname string
         if err := rows.Scan(&id, &firstname, &lastname); err != nil {
-            return renderJsonError(c.Controller, err)
+            return renderRestError(c.Controller, err)
         }
         
         users = append(users, &models.User{ id, firstname, lastname })
     }
     if err := rows.Err(); err != nil {
-        return renderJsonError(c.Controller, err)
+        return renderRestError(c.Controller, err)
     }
     
-    return c.RenderJson(users)
+    return renderRestSuccess(c.Controller, users)
 }
 
 func (c Users) Create(firstname string, lastname string) revel.Result {
@@ -50,17 +50,17 @@ func (c Users) Create(firstname string, lastname string) revel.Result {
     }
     
     if firstname == "" {
-        return renderJsonError(c.Controller, errors.New("Fill first name"))
+        return renderRestError(c.Controller, errors.New("Fill first name"))
     }
     if lastname == "" {
-        return renderJsonError(c.Controller, errors.New("Fill last name"))
+        return renderRestError(c.Controller, errors.New("Fill last name"))
     }
     
     rows, err := c.Txn.Query("insert into users (firstname, lastname) values ($1, $2);", firstname, lastname)
     if err != nil {
-        return renderJsonError(c.Controller, err)
+        return renderRestError(c.Controller, err)
     }
     defer rows.Close()
     
-    return c.RenderJson("OK")
+    return renderRestSuccess(c.Controller, nil)
 }

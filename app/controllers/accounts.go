@@ -18,20 +18,20 @@ func (c Accounts) CheckAuth() revel.Result {
         return res
     }
     
-    return c.RenderJson("OK")
+    return renderRestSuccess(c.Controller, nil)
 }
 
 func checkAuth(c *revel.Controller) revel.Result {
     username, password, ok := basicAuth(c.Request.Request)
     if !ok {
-        return renderJsonError(c, errors.New("Missing auth info"))
+        return renderRestError(c, errors.New("Missing auth info"))
     }
     
     usernameConf, _ := revel.Config.String("auth.username")
 	passwordConf, _ := revel.Config.String("auth.password")
 	
 	if username != usernameConf || password != passwordConf {
-	    return renderJsonError(c, errors.New("Incorrect username or password"))
+	    return renderRestError(c, errors.New("Incorrect username or password"))
 	}
 	
 	return nil

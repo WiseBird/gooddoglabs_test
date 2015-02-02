@@ -53,7 +53,7 @@
                 } else {
                     $("#usersTable tbody").empty();
                     
-                    var users = data;
+                    var users = data.data;
                     for(var i = 0; i < users.length; i++) {
                         var user = users[i];
                         addUserToTable(user);

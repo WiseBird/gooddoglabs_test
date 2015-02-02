@@ -12,10 +12,15 @@ func (c App) Index() revel.Result {
 	return c.Render()
 }
 
-type RestError struct {
+type RestResult struct {
+    Data interface{} `json:"data"`
     Error string `json:"error"`
 }
 
-func renderJsonError(c *revel.Controller, err error) revel.Result {
-	return c.RenderJson(RestError{err.Error()})
+func renderRestError(c *revel.Controller, err error) revel.Result {
+	return c.RenderJson(RestResult{Error: err.Error()})
+}
+
+func renderRestSuccess(c *revel.Controller, data interface{}) revel.Result {
+	return c.RenderJson(RestResult{Data: data})
 }
