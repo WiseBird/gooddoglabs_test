@@ -1,23 +1,29 @@
 {{set . "title" "Home"}}
 {{template "header.html" .}}
 
-<header class="hero-unit" style="background-color:#A9F16C">
-  <div class="container">
-    <div class="row">
-      <div class="hero-text">
-        <h1>It works!</h1>
-        <p></p>
-      </div>
+<div class="content">
+    <div id="users">
+        <div id="usersError" class="error"></div>
+        <form class="pure-form" id="usersForm">
+            <fieldset>
+                <input type="test" placeholder="First name" name="firstname">
+                <input type="test" placeholder="Last name" name="lastname">
+        
+                <button type="submit" class="pure-button pure-button-primary">Add</button>
+            </fieldset>
+        </form>
+        <table class="pure-table" id="usersTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
-  </div>
-</header>
-
-<div class="container">
-  <div class="row">
-    <div class="span6">
-      {{template "flash.html" .}}
-    </div>
-  </div>
 </div>
 
 {{template "footer.html" .}}

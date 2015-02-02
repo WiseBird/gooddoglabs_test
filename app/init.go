@@ -76,7 +76,7 @@ COMMIT;
 -- ----------------------------
 --  Alter sequences owned by
 -- ----------------------------
-ALTER SEQUENCE "public"."users_id_seq" RESTART 2 OWNED BY "users"."id";
+ALTER SEQUENCE "public"."users_id_seq" RESTART 3 OWNED BY "users"."id";
 
 -- ----------------------------
 --  Primary key structure for table users
