@@ -1,6 +1,11 @@
 package app
 
-import "github.com/revel/revel"
+import (
+    "github.com/revel/revel"
+    "fmt"
+    _ "github.com/lib/pq"
+    db "github.com/revel/revel/modules/db/app"
+)
 
 func init() {
 	// Filters is the default set of global filters.
@@ -21,7 +26,7 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	// revel.OnAppStart(InitDB)
+	revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache)
 }
 
@@ -35,4 +40,54 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	c.Response.Out.Header().Add("X-Content-Type-Options", "nosniff")
 
 	fc[0](c, fc[1:]) // Execute the next filter stage.
+}
+
+func InitDB() {
+    db.Init()
+
+    qstr := `
+
+-- ----------------------------
+--  Sequence structure for users_id_seq
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."users";
+DROP SEQUENCE IF EXISTS "public"."users_id_seq";
+CREATE SEQUENCE "public"."users_id_seq" INCREMENT 1 START 3 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
+
+-- ----------------------------
+--  Table structure for users
+-- ----------------------------
+CREATE TABLE "public"."users" (
+	"id" int4 NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+	"firstname" varchar(255) NOT NULL COLLATE "default",
+	"lastname" varchar(255) NOT NULL COLLATE "default"
+)
+WITH (OIDS=FALSE);
+
+-- ----------------------------
+--  Records of users
+-- ----------------------------
+BEGIN;
+INSERT INTO "public"."users" VALUES ('1', 'John', 'Doe');
+INSERT INTO "public"."users" VALUES ('2', 'Jane', 'Doe');
+COMMIT;
+
+
+-- ----------------------------
+--  Alter sequences owned by
+-- ----------------------------
+ALTER SEQUENCE "public"."users_id_seq" RESTART 2 OWNED BY "users"."id";
+
+-- ----------------------------
+--  Primary key structure for table users
+-- ----------------------------
+ALTER TABLE "public"."users" ADD PRIMARY KEY ("id") NOT DEFERRABLE INITIALLY IMMEDIATE;
+ `
+
+    _, err := db.Db.Exec(qstr)
+    if err != nil {
+        panic(err)
+    }
+    
+    fmt.Println("Database rebuilded successfully")
 }
