@@ -2,6 +2,27 @@
 {{template "header.html" .}}
 
 <div class="content">
+    <div id="login">
+        <div id="loginError" class="error"></div>
+        <form class="pure-form pure-form-aligned" id="loginForm">
+            <fieldset>
+                <div class="pure-control-group">
+                    <label for="name">Username</label>
+                    <input id="name" name="name" type="text" placeholder="admin">
+                </div>
+        
+                <div class="pure-control-group">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" placeholder="admin1">
+                </div>
+
+                <div class="pure-controls">
+                    <button type="submit" class="pure-button pure-button-primary">Login</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
     <div id="users">
         <div id="usersError" class="error"></div>
         <form class="pure-form" id="usersForm">

@@ -39,6 +39,18 @@ func (_ tUsers) Create(
 }
 
 
+type tAccounts struct {}
+var Accounts tAccounts
+
+
+func (_ tAccounts) CheckAuth(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Accounts.CheckAuth", args).Url
+}
+
+
 type tStatic struct {}
 var Static tStatic
 

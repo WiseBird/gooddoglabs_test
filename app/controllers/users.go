@@ -13,6 +13,11 @@ type Users struct {
 }
 
 func (c Users) List() revel.Result {
+    res := checkAuth(c.Controller)
+    if res != nil {
+        return res
+    }
+    
     rows, err := c.Txn.Query("SELECT id, firstname, lastname FROM users")
     if err != nil {
         return renderJsonError(c.Controller, err)
@@ -39,6 +44,11 @@ func (c Users) List() revel.Result {
 }
 
 func (c Users) Create(firstname string, lastname string) revel.Result {
+    res := checkAuth(c.Controller)
+    if res != nil {
+        return res
+    }
+    
     if firstname == "" {
         return renderJsonError(c.Controller, errors.New("Fill first name"))
     }
@@ -53,12 +63,4 @@ func (c Users) Create(firstname string, lastname string) revel.Result {
     defer rows.Close()
     
     return c.RenderJson("OK")
-}
-
-type RestError struct {
-    Error string `json:"error"`
-}
-
-func renderJsonError(c *revel.Controller, err error) revel.Result {
-	return c.RenderJson(RestError{err.Error()})
 }

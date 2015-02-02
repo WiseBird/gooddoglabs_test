@@ -1,12 +1,50 @@
 (function () {
-    $(function() {
-        loadUsers();
-        
-        $("#usersForm").on("submit", onUsersFormSubmit)
+    var baseAuthHash = "";
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + baseAuthHash);
+        }
     });
     
+    function setBaseAuth(user, password) {
+        var tok = user + ':' + password;
+        baseAuthHash = Base64.encode(tok);
+    }
+    
+    $(function() {
+        $("#usersForm").on("submit", onUsersFormSubmit)
+        $("#loginForm").on("submit", onLoginFormSubmit)
+    });
+    
+    function onLoginFormSubmit(event) {
+        event.preventDefault();
+        
+        setBaseAuth($("#name").val(), $("#password").val());
+        
+        $("#loginError").text("");
+        
+        var data = $(this).serialize()
+        
+        $.get("/accounts/checkAuth")
+            .done(function(data) {
+                if(data.error){
+                    $("#loginError").text(data.error).show();
+                } else {
+                    $("#login").hide();
+                    showUsers();
+                }
+            });
+            
+        return false
+    }
+    
+    function showUsers() {
+        $("#users").show();
+        loadUsers();    
+    }
+    
     function loadUsers() {
-        $("#usersError").hide();
+        $("#usersError").text("");
         
         $.get("/users")
             .done(function(data) {
@@ -36,7 +74,7 @@
     function onUsersFormSubmit(event) {
         event.preventDefault();
         
-        $("#usersError").hide();
+        $("#usersError").text("");
         
         var data = $(this).serialize()
         

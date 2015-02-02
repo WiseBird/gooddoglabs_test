@@ -9,4 +9,9 @@
 
 .error {
     color: red;
+    height: 20px;
+}
+
+#users {
+    display: none;
 }
