@@ -1,8 +1,7 @@
 package controllers
 
 import (
-	"errors"
-	"github.com/WiseBird/gooddoglabs_test/app/models"
+	"github.com/WiseBird/gooddoglabs_test/dal"
 	"github.com/revel/revel"
 	db "github.com/revel/revel/modules/db/app"
 )
@@ -18,25 +17,10 @@ func (c Users) List() revel.Result {
 		return res
 	}
 
-	rows, err := c.Txn.Query("SELECT id, firstname, lastname FROM users")
+	context := dal.NewContext(c.Txn)
+
+	users, err := context.Users()
 	if err != nil {
-		return renderRestError(c.Controller, err)
-	}
-	defer rows.Close()
-
-	users := make([]*models.User, 0)
-
-	for rows.Next() {
-		var id int64
-		var firstname string
-		var lastname string
-		if err := rows.Scan(&id, &firstname, &lastname); err != nil {
-			return renderRestError(c.Controller, err)
-		}
-
-		users = append(users, &models.User{id, firstname, lastname})
-	}
-	if err := rows.Err(); err != nil {
 		return renderRestError(c.Controller, err)
 	}
 
@@ -49,18 +33,13 @@ func (c Users) Create(firstname string, lastname string) revel.Result {
 		return res
 	}
 
-	if firstname == "" {
-		return renderRestError(c.Controller, errors.New("Fill first name"))
-	}
-	if lastname == "" {
-		return renderRestError(c.Controller, errors.New("Fill last name"))
-	}
+	user := &dal.User{FirstName: firstname, LastName: lastname}
 
-	rows, err := c.Txn.Query("insert into users (firstname, lastname) values ($1, $2);", firstname, lastname)
+	context := dal.NewContext(c.Txn)
+	err := context.CreateUser(user)
 	if err != nil {
 		return renderRestError(c.Controller, err)
 	}
-	defer rows.Close()
 
 	return renderRestSuccess(c.Controller, nil)
 }

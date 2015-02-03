@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/WiseBird/gooddoglabs_test/app/models"
+	"github.com/WiseBird/gooddoglabs_test/dal"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -73,13 +73,13 @@ func (client *Client) CheckAuth() error {
 	return err
 }
 
-func (client *Client) Users() ([]models.User, error) {
+func (client *Client) Users() ([]dal.User, error) {
 	data, err := client.callService("GET", "/users", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	users := []models.User{}
+	users := []dal.User{}
 	err = json.Unmarshal(data, &users)
 	if err != nil {
 		return nil, err

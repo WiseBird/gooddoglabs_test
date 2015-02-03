@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/WiseBird/gooddoglabs_test/app/models"
 	"github.com/revel/revel"
 )
 
@@ -13,10 +12,15 @@ func (c App) Index() revel.Result {
 	return c.Render()
 }
 
+type RestResult struct {
+	Data  interface{} `json:"data"`
+	Error string      `json:"error"`
+}
+
 func renderRestError(c *revel.Controller, err error) revel.Result {
-	return c.RenderJson(models.RestResult{Error: err.Error()})
+	return c.RenderJson(RestResult{Error: err.Error()})
 }
 
 func renderRestSuccess(c *revel.Controller, data interface{}) revel.Result {
-	return c.RenderJson(models.RestResult{Data: data})
+	return c.RenderJson(RestResult{Data: data})
 }
