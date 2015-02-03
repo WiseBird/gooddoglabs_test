@@ -12,14 +12,12 @@ type Users struct {
 }
 
 func (c Users) List() revel.Result {
-	res := checkAuth(c.Controller)
+	res := checkAuth(c.Controller, c.Transactional)
 	if res != nil {
 		return res
 	}
 
-	context := dal.NewContext(c.Txn)
-
-	users, err := context.Users()
+	users, err := dal.NewContext(c.Txn).Users()
 	if err != nil {
 		return renderRestError(c.Controller, err)
 	}
@@ -27,16 +25,15 @@ func (c Users) List() revel.Result {
 	return renderRestSuccess(c.Controller, users)
 }
 
-func (c Users) Create(firstname string, lastname string) revel.Result {
-	res := checkAuth(c.Controller)
+func (c Users) Create(username, firstname, lastname, password string) revel.Result {
+	res := checkAuth(c.Controller, c.Transactional)
 	if res != nil {
 		return res
 	}
 
-	user := &dal.User{FirstName: firstname, LastName: lastname}
+	user := &dal.User{UserName: username, FirstName: firstname, LastName: lastname}
 
-	context := dal.NewContext(c.Txn)
-	err := context.CreateUser(user)
+	err := dal.NewContext(c.Txn).CreateUser(user, password)
 	if err != nil {
 		return renderRestError(c.Controller, err)
 	}

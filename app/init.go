@@ -59,8 +59,10 @@ CREATE SEQUENCE "public"."users_id_seq" INCREMENT 1 START 3 MAXVALUE 92233720368
 -- ----------------------------
 CREATE TABLE "public"."users" (
 	"id" int4 NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+	"username" varchar(255) NOT NULL COLLATE "default",
 	"firstname" varchar(255) NOT NULL COLLATE "default",
-	"lastname" varchar(255) NOT NULL COLLATE "default"
+	"lastname" varchar(255) NOT NULL COLLATE "default",
+	"password" varchar(255) NOT NULL COLLATE "default"
 )
 WITH (OIDS=FALSE);
 
@@ -68,8 +70,8 @@ WITH (OIDS=FALSE);
 --  Records of users
 -- ----------------------------
 BEGIN;
-INSERT INTO "public"."users" VALUES ('1', 'John', 'Doe');
-INSERT INTO "public"."users" VALUES ('2', 'Jane', 'Doe');
+INSERT INTO "public"."users" VALUES ('1', 'admin', 'John', 'Doe', 'admin1');
+INSERT INTO "public"."users" VALUES ('2', 'JaneDoe', 'Jane', 'Doe', 'JaneDoe');
 COMMIT;
 
 

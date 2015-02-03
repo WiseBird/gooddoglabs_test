@@ -25,18 +25,41 @@
 
     <div id="users">
         <div id="usersError" class="error"></div>
-        <form class="pure-form" id="usersForm">
+        <form class="pure-form pure-form-aligned" id="usersForm">
             <fieldset>
-                <input type="test" placeholder="First name" name="firstname">
-                <input type="test" placeholder="Last name" name="lastname">
+                <legend>Create user</legend>
+                
+                <div class="pure-control-group">
+                    <label for="username">Username</label>
+                    <input type="text" placeholder="Username" id="username" name="username">
+                </div>
         
-                <button type="submit" class="pure-button pure-button-primary">Add</button>
+                <div class="pure-control-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password">
+                </div>
+        
+                <div class="pure-control-group">
+                    <label for="foo">First name</label>
+                    <input id="firstname" type="text" placeholder="First name" name="firstname">
+                </div>
+        
+                <div class="pure-control-group">
+                    <label for="lastname">Last name</label>
+                    <input id="lastname" type="text" placeholder="Last name" name="lastname">
+                </div>
+        
+                <div class="pure-controls">
+                    <button type="submit" class="pure-button pure-button-primary">Create</button>
+                </div>
             </fieldset>
         </form>
+        
         <table class="pure-table" id="usersTable">
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Username</th>
                     <th>First name</th>
                     <th>Last name</th>
                 </tr>

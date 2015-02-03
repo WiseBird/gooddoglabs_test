@@ -28,12 +28,11 @@ func main() {
 		var username, password string
 		_, err = fmt.Sscanf(line, "%s %s", &username, &password)
 		if err != nil {
-			fmt.Println("Sscanf" + err.Error())
+			fmt.Println("Sscanf " + err.Error())
 			continue
 		}
 
-		client.SetAuth(username, password)
-		err = client.CheckAuth()
+		err = client.Login(username, password)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -54,21 +53,21 @@ func main() {
 		}
 
 		for {
-			fmt.Printf("Enter new user first and last names with space between: ")
+			fmt.Printf("Enter new user's username, password, first name and last name with space between: ")
 			line, err := reader.ReadString('\n')
 			if err != nil {
 				fmt.Println(err)
 				continue
 			}
 
-			var firstname, lastname string
-			_, err = fmt.Sscanf(line, "%s %s", &firstname, &lastname)
+			var username, password, firstname, lastname string
+			_, err = fmt.Sscanf(line, "%s %s %s %s", &username, &password, &firstname, &lastname)
 			if err != nil {
-				fmt.Println("Sscanf" + err.Error())
+				fmt.Println("Sscanf " + err.Error())
 				continue
 			}
 
-			err = client.CreateUser(firstname, lastname)
+			err = client.CreateUser(username, password, firstname, lastname)
 			if err != nil {
 				fmt.Println(err)
 				continue

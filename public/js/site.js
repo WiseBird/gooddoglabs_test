@@ -65,6 +65,7 @@
     function addUserToTable(user) {
         var row = $("<tr>")
         $("<td>").text(user.id).appendTo(row);
+        $("<td>").text(user.username).appendTo(row);
         $("<td>").text(user.firstname).appendTo(row);
         $("<td>").text(user.lastname).appendTo(row);
                 

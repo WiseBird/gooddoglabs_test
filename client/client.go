@@ -27,7 +27,7 @@ func NewClient(url string) *Client {
 	return &Client{url: url, client: client}
 }
 
-func (client *Client) SetAuth(username, password string) {
+func (client *Client) setAuth(username, password string) {
 	client.auth = basicAuth(username, password)
 }
 func basicAuth(username, password string) string {
@@ -68,7 +68,8 @@ func (client *Client) callService(httpMethod, method string, data url.Values) ([
 	return result.Data, nil
 }
 
-func (client *Client) CheckAuth() error {
+func (client *Client) Login(username, password string) error {
+	client.setAuth(username, password)
 	_, err := client.callService("GET", "/accounts/checkAuth", nil)
 	return err
 }
@@ -88,8 +89,10 @@ func (client *Client) Users() ([]dal.User, error) {
 	return users, nil
 }
 
-func (client *Client) CreateUser(firstname, lastname string) error {
+func (client *Client) CreateUser(username, password, firstname, lastname string) error {
 	values := make(url.Values)
+	values.Add("username", username)
+	values.Add("password", password)
 	values.Add("firstname", firstname)
 	values.Add("lastname", lastname)
 	_, err := client.callService("POST", "/users", values)
